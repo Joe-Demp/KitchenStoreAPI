@@ -10,4 +10,7 @@ app
 * Should track expiry dates and provide warnings
 * Should divide products into logical segments
 * Should generate shopping lists on demand
+
+##Thanks to
+Jayson Taylor https://jasontaylor.dev/ for inspiration with respect to Clean Archictecture
  
