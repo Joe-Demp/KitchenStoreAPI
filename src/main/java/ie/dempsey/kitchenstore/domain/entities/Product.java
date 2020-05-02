@@ -2,10 +2,7 @@ package ie.dempsey.kitchenstore.domain.entities;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,9 +17,8 @@ public class Product implements Serializable {
     // todo move name, description to an Embeddable class
     private String name = "";
     private String description = "";
-
-    public Product() {
-    }
+    @ManyToOne
+    private House house;
 
     public long getId() {
         return id;
@@ -66,6 +62,15 @@ public class Product implements Serializable {
 
     public Product setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public House getHouse() {
+        return house;
+    }
+
+    public Product setHouse(House house) {
+        this.house = house;
         return this;
     }
 }

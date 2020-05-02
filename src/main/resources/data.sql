@@ -9,9 +9,9 @@ VALUES (1),
        (3)
 ;
 
-INSERT INTO user (id, joined, name, `password`)
-VALUES (1, '2020-05-02', 'Mary Reilly', 'ilovemyfridge'),
-       (2, '2020-04-23', 'Bill Dwyre', 'crunchcrunch')
+INSERT INTO user (id, joined, name, `password`, status)
+VALUES (1, '2020-05-02', 'Mary Reilly', 'ilovemyfridge', 0),
+       (2, '2020-04-23', 'Bill Dwyre', 'crunchcrunch', 1)
 ;
 
 INSERT INTO user_houses (users_id, houses_id)
