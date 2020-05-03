@@ -11,7 +11,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String name;
+    private String name = "";
     private Date joined;
     private String password;
     private Status status = Status.REGULAR;
