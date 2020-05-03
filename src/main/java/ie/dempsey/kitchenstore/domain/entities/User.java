@@ -1,5 +1,8 @@
 package ie.dempsey.kitchenstore.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,6 +19,7 @@ public class User implements Serializable {
     private String password;
     private Status status = Status.REGULAR;
     @ManyToMany
+    @JsonBackReference
     private Set<House> houses = new HashSet<>();
 
     public long getId() {
@@ -82,6 +86,7 @@ public class User implements Serializable {
         return this;
     }
 
+    @JsonIgnore
     public boolean isAdmin() {
         return status == Status.ADMIN;
     }

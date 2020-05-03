@@ -1,10 +1,14 @@
 package ie.dempsey.kitchenstore.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
-public class House {
+public class House implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -12,10 +16,14 @@ public class House {
     private String name = "";
     private String description = "";
     private Type type = Type.CUPBOARD;
+
     // todo consider changing this to a product count object
     @OneToMany(mappedBy = "house")
+    @JsonBackReference
     private List<Product> products = new ArrayList<>();
+
     @ManyToMany(mappedBy = "houses")
+    @JsonManagedReference
     private Set<User> users = new HashSet<>();
 
     public long getId() {

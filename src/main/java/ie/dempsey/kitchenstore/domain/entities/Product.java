@@ -1,5 +1,6 @@
 package ie.dempsey.kitchenstore.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class Product implements Serializable {
     private String name = "";
     private String description = "";
     @ManyToOne
+    @JsonManagedReference
     private House house;
 
     public long getId() {
