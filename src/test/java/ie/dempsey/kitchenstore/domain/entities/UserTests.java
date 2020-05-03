@@ -10,13 +10,13 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTests {
-    private static long sampleId = 46L;
-    private static String sampleName = "John Doe";
-    private static Date sampleJoined =
+    private static final long sampleId = 46L;
+    private static final String sampleName = "John Doe";
+    private static final Date sampleJoined =
             new Calendar.Builder().setDate(2020, 5, 2).build().getTime();
-    private static String samplePassword = "password";
-    private static User.Status sampleStatus = User.Status.ADMIN;
-    private static House sampleHouse = new House();
+    private static final String samplePassword = "password";
+    private static final User.Status sampleStatus = User.Status.ADMIN;
+    private static final House sampleHouse = new House();
 
     private static User makeJohn() {
         return new User()
@@ -58,5 +58,14 @@ public class UserTests {
 
         assertEquals(1, john.getHouses().size());
         assertTrue(john.getHouses().contains(sampleHouse));
+    }
+
+    @Test
+    public void settersShouldReturnTheProduct() {
+        User john = makeJohn();
+        String newPassword = "MeInGreece!";
+
+        assertEquals(john, john.setPassword(newPassword));
+        assertEquals(newPassword, john.getPassword());
     }
 }

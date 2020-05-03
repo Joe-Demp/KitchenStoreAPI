@@ -1,19 +1,18 @@
 package ie.dempsey.kitchenstore.domain.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String name;
-    private String description;
+    private Date created;
+    private String name = "";
+    private String description = "";
     private Type type = Type.CUPBOARD;
+    // todo consider changing this to a product count object
     @OneToMany(mappedBy = "house")
     private List<Product> products = new ArrayList<>();
     @ManyToMany(mappedBy = "houses")
@@ -25,6 +24,15 @@ public class House {
 
     public House setId(long id) {
         this.id = id;
+        return this;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public House setCreated(Date created) {
+        this.created = created;
         return this;
     }
 
