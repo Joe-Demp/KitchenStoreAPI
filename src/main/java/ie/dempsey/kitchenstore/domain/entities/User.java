@@ -2,6 +2,7 @@ package ie.dempsey.kitchenstore.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,10 +12,12 @@ import java.util.Set;
 
 @Entity
 public class User implements Serializable {
+    // todo add column tags to make columns unique, not nullable etc
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name = "";
+    @CreationTimestamp
     private Date joined;
     private String password;
     private Status status = Status.REGULAR;

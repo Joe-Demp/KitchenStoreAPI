@@ -2,6 +2,7 @@ package ie.dempsey.kitchenstore.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ public class House implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @CreationTimestamp
     private Date created;
     private String name = "";
     private String description = "";
