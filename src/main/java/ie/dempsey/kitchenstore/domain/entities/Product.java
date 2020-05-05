@@ -18,6 +18,7 @@ public class Product implements Serializable {
     // todo move name, description to an Embeddable class
     private String name = "";
     private String description = "";
+    private int quantity = 0;
     @ManyToOne
     @JsonManagedReference
     private House house;
@@ -64,6 +65,15 @@ public class Product implements Serializable {
 
     public Product setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Product setQuantity(int quantity) {
+        this.quantity = quantity;
         return this;
     }
 

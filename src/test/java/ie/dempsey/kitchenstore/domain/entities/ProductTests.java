@@ -17,6 +17,8 @@ public class ProductTests {
     public static final String sampleName = "Low-fat Milk";
     public static final String sampleDescription = "Tesco brand low fat milk";
 
+    // todo test quantities
+
     private static Product makeMilk() {
         return new Product()
                 .setId(sampleId)
