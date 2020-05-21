@@ -1,14 +1,10 @@
-package ie.dempsey.kitchenstore.application.services;
+package ie.dempsey.kitchenstore.application.services.product;
 
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.domain.entities.Tag;
 
-import java.util.List;
-
-public interface ProductService {
-    List<Product> getProducts(House house);
-
+public interface ProductCommandService {
     void add(House house, Product product);
 
     void remove(House house, Product product);
