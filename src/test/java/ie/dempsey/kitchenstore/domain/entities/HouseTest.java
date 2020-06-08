@@ -6,7 +6,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class HouseTests {
+public class HouseTest {
     private static final long sampleId = 87L;
     private static final Date sampleCreated =
             new Calendar.Builder().setDate(2020, 2, 14).build().getTime();

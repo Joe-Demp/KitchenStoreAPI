@@ -8,7 +8,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class ProductTests {
+public class ProductTest {
     public static final long sampleId = 23L;
     public static final Date sampleCreated =
             new Calendar.Builder().setDate(2020, 2, 14).build().getTime();

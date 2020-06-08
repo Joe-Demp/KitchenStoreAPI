@@ -9,7 +9,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserTests {
+public class UserTest {
     private static final long sampleId = 46L;
     private static final String sampleName = "John Doe";
     private static final Date sampleJoined =

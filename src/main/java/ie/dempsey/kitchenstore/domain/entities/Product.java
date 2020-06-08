@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Product implements Serializable {
@@ -83,6 +85,16 @@ public class Product implements Serializable {
 
     public Product setHouse(House house) {
         this.house = house;
+        return this;
+    }
+
+    // todo implement the tags properly
+    public Set<Tag> getTags() {
+        return new HashSet<>();
+    }
+
+    public Product setTags(Set<Tag> tags) {
+        // does nothing
         return this;
     }
 }

@@ -6,6 +6,8 @@ The focus is to get a rudimentary project working first, and to worry about othe
 an Angular Front-End Client, integration with a bar-code scanner for products, proper security mechanisms
 (user accounts, privileges, Http sessions,...)
 
+Note this for later: https://barcodetopc.com/
+
 ## Project Targets
 1. Create an API for any user to do CRUD operations on products. Products should be members of logical houses 
 (containers)
