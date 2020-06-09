@@ -2,7 +2,7 @@ package ie.dempsey.kitchenstore.application.services.product;
 
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
-import ie.dempsey.kitchenstore.domain.entities.Tag;
+import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import ie.dempsey.kitchenstore.infrastructure.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +41,9 @@ public class RegularProductCommandService implements ProductCommandService {
      */
     @Override
     public void add(House house, Product product) {
-        productRepository.save(product);
         putProductInHouse(house, product);
+        houseRepository.save(house);
+        productRepository.save(product);
     }
 
     /**
@@ -50,8 +51,9 @@ public class RegularProductCommandService implements ProductCommandService {
      */
     @Override
     public void remove(House house, Product product) {
-        productRepository.delete(product);
         takeProductOutOfHouse(house, product);
+        houseRepository.save(house);
+        productRepository.delete(product);
     }
 
     @Override
@@ -64,6 +66,10 @@ public class RegularProductCommandService implements ProductCommandService {
     public void moveTo(Product product, House source, House destination) {
         takeProductOutOfHouse(source, product);
         putProductInHouse(destination, product);
+
+        productRepository.save(product);
+        houseRepository.save(source);
+        houseRepository.save(destination);
     }
 
     @Override
@@ -88,17 +94,22 @@ public class RegularProductCommandService implements ProductCommandService {
         // consider the situation where a homeowner always wants two cartons of milk in the house at once
         // should they have one carton of milk + one ghost carton?
         // todo consider how the User will manage the shopping list. Should the User specify a desired quantity
-        //  for certain products? What about the same product spread accross different Houses?
+        //  for certain products? What about the same product spread across different Houses?
     }
 
+    /**
+     * Adds an association between a house and a product.
+     */
     private void putProductInHouse(House house, Product product) {
+        product.setHouse(house);
         house.getProducts().add(product);
-        houseRepository.save(house);
     }
 
+    /**
+     * Removes an assocation between a house and a product.
+     */
     private void takeProductOutOfHouse(House house, Product product) {
-        List<Product> houseProducts = house.getProducts();
-        houseProducts.remove(product);
-        houseRepository.save(house);
+        product.setHouse(null);
+        house.getProducts().remove(product);
     }
 }

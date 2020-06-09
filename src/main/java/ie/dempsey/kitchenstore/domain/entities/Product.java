@@ -1,6 +1,7 @@
 package ie.dempsey.kitchenstore.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;

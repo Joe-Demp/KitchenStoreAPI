@@ -2,7 +2,7 @@ package ie.dempsey.kitchenstore.application.services.product;
 
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
-import ie.dempsey.kitchenstore.domain.entities.Tag;
+import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
 
 public interface ProductCommandService {
     void add(House house, Product product);
