@@ -5,8 +5,17 @@ import ie.dempsey.kitchenstore.domain.entities.Product;
 
 import java.util.List;
 
+
 public interface ProductQueryService {
+    List<Product> getAllProducts();
+
     List<Product> getProducts(House house);
 
-    long countAllProducts();
+    List<Product> getProductsWithName(String name);
+
+    List<Product> getProductsWithName(String name, House house);
+
+    Product getProductById(long id);
+
+    long countProducts();
 }
