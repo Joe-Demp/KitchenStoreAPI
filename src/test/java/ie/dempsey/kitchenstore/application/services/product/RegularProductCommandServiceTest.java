@@ -114,7 +114,7 @@ class RegularProductCommandServiceTest {
         assertTrue(lemonade.getTags().contains(tags[0]));
         assertTrue(lemonade.getTags().contains(tags[1]));
 
-        Mockito.verify(mockProductRepo).save(lemonade);
+        Mockito.verify(mockProductRepo, Mockito.times(2)).save(lemonade);
     }
 
     @Test

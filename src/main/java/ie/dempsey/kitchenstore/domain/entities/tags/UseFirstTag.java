@@ -1,7 +1,7 @@
 package ie.dempsey.kitchenstore.domain.entities.tags;
 
 public class UseFirstTag extends AbstractTag {
-    private UseFirstTag() {
+    public UseFirstTag() {
         super(
                 "Use First",
                 "This product should be used before others of the same kind",

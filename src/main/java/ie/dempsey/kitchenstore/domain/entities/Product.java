@@ -1,6 +1,7 @@
 package ie.dempsey.kitchenstore.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import ie.dempsey.kitchenstore.domain.entities.tags.AbstractTag;
 import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -22,9 +23,13 @@ public class Product implements Serializable {
     private String name = "";
     private String description = "";
     private int quantity = 0;
+
     @ManyToOne
     @JsonManagedReference
     private House house;
+
+    @OneToMany
+    private Set<AbstractTag> tags = new HashSet<>();
 
     public long getId() {
         return id;
@@ -89,13 +94,21 @@ public class Product implements Serializable {
         return this;
     }
 
-    // todo implement the tags properly
     public Set<Tag> getTags() {
-        return new HashSet<>();
+        Set<? extends Tag> tagsToReturn = tags;
+        return (Set<Tag>) tagsToReturn;
     }
 
     public Product setTags(Set<Tag> tags) {
-        // does nothing
+        Set<AbstractTag> newTagSet = new HashSet<>();
+        for (Tag tag : tags) {
+            if (tag instanceof AbstractTag) {
+                AbstractTag aTag = (AbstractTag) tag;
+                newTagSet.add(aTag);
+            }
+        }
+
+        this.tags = newTagSet;
         return this;
     }
 }

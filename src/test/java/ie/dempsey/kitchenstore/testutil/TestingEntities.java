@@ -66,8 +66,8 @@ public class TestingEntities {
         CUPBOARD.getProducts().add(CEREAL);
 
         TAGS = new Tag[]{
-                PerishableTag.getInstance(),
-                UseFirstTag.getInstance()
+                new PerishableTag(),
+                new UseFirstTag()
         };
     }
 }

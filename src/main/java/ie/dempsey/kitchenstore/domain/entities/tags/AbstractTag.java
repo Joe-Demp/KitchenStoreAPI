@@ -1,18 +1,22 @@
 package ie.dempsey.kitchenstore.domain.entities.tags;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import ie.dempsey.kitchenstore.domain.entities.Product;
 
+import javax.persistence.*;
+
+// SINGLE_TABLE is the default
 @Entity(name = "tag")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class AbstractTag implements Tag {
-    public String description;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
+    private String description;
     private int priority;
+
+    @ManyToOne
+    private Product owner;
 
     public AbstractTag() {
     }
@@ -32,6 +36,42 @@ public abstract class AbstractTag implements Tag {
         return this;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public AbstractTag setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public AbstractTag setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public AbstractTag setPriority(int priority) {
+        this.priority = priority;
+        return this;
+    }
+
+    public Product getOwner() {
+        return owner;
+    }
+
+    public AbstractTag setOwner(Product owner) {
+        this.owner = owner;
+        return this;
+    }
+
     @Override
     public String name() {
         return name;
@@ -45,5 +85,13 @@ public abstract class AbstractTag implements Tag {
     @Override
     public int priority() {
         return priority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof AbstractTag) {
+            return name.equals(((AbstractTag) o).name());
+        }
+        return false;
     }
 }
