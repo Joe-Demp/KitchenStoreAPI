@@ -1,5 +1,6 @@
 package ie.dempsey.kitchenstore.application.services.product;
 
+import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
@@ -7,6 +8,7 @@ import ie.dempsey.kitchenstore.infrastructure.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RegularProductQueryService implements ProductQueryService {
     private ProductRepository productRepository;
@@ -21,32 +23,48 @@ public class RegularProductQueryService implements ProductQueryService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> getAll() {
+        return productRepository.findAll();
+    }
+
+    /**
+     * probably don't need this
+     */
+    @Override
+    public List<Product> getFromHouse(House house) throws NoSuchHouseException {
+        long houseId = house.getId();
+
+        if (houseId > 0) {
+            Optional<House> optHouse = houseRepository.findById(houseId);
+            if (optHouse.isPresent()) {
+                return optHouse.get().getProducts();
+            } else {
+                String message = String.format("House with id=%d does not exist.", houseId);
+                throw new NoSuchHouseException(message);
+            }
+        }
+
+        throw new NoSuchHouseException(String.format("House cannot have invalid id %d", houseId));
+    }
+
+    // todo deal with case sensitivity
+    @Override
+    public List<Product> getWithName(String name) {
+        return getWithName(name, null);
+    }
+
+    @Override
+    public List<Product> getWithName(String name, House house) {
         return null;
     }
 
     @Override
-    public List<Product> getProducts(House house) {
+    public Product getById(long id) {
         return null;
     }
 
     @Override
-    public List<Product> getProductsWithName(String name) {
-        return getProductsWithName(name, null);
-    }
-
-    @Override
-    public List<Product> getProductsWithName(String name, House house) {
-        return null;
-    }
-
-    @Override
-    public Product getProductById(long id) {
-        return null;
-    }
-
-    @Override
-    public long countProducts() {
-        return 0;
+    public long countAll() {
+        return productRepository.count();
     }
 }

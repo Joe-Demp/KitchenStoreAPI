@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /* Services contain business logic */
 
@@ -30,10 +28,6 @@ public class RegularProductCommandService implements ProductCommandService {
     ) {
         this.productRepository = productRepository;
         this.houseRepository = houseRepository;
-    }
-
-    public static <T> List<T> arrayToList(T[] arr) {
-        return Arrays.stream(arr).collect(Collectors.toList());
     }
 
     /**
@@ -75,7 +69,7 @@ public class RegularProductCommandService implements ProductCommandService {
     @Override
     public void tag(Product product, Tag... tags) {
         Set<Tag> productTags = product.getTags();
-        productTags.addAll(arrayToList(tags));
+        productTags.addAll(Arrays.asList(tags));
         productRepository.save(product);
     }
 

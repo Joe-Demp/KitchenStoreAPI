@@ -19,10 +19,16 @@ public class TestingEntities {
     public static final Date MARCH_2019;
     public static final Date MAY_2018;
 
+    public static final long CUPBOARD_ID = 34;
+
     public static final House CUPBOARD;
     public static final House REFRIGERATOR;
 
+    public static final long NON_EXISTENT_ID = 400;
+    public static final long STEAK_ID = 20;
+
     public static final Product LEMONADE;
+    public static final Product F_LEMONADE;
     public static final Product STEAK;
     public static final Product CEREAL;
 
@@ -38,6 +44,7 @@ public class TestingEntities {
         MAY_2018 = cal.getTime();
 
         CUPBOARD = new House()
+                .setId(CUPBOARD_ID)
                 .setName("Cupboard")
                 .setDescription("The press in the kitchen")
                 .setCreated(MARCH_2019)
@@ -53,9 +60,16 @@ public class TestingEntities {
                 .setQuantity(2)
                 .setHouse(CUPBOARD);
 
+        F_LEMONADE = new Product()
+                .setName("Lemonade")
+                .setQuantity(8)
+                .setHouse(REFRIGERATOR);
+
         STEAK = new Product()
+                .setId(STEAK_ID)
                 .setName("Steak")
-                .setQuantity(4);
+                .setQuantity(4)
+                .setHouse(REFRIGERATOR);
 
         CEREAL = new Product()
                 .setName("Cereal")
@@ -64,6 +78,8 @@ public class TestingEntities {
 
         CUPBOARD.getProducts().add(LEMONADE);
         CUPBOARD.getProducts().add(CEREAL);
+        REFRIGERATOR.getProducts().add(STEAK);
+        REFRIGERATOR.getProducts().add(F_LEMONADE);
 
         TAGS = new Tag[]{
                 new PerishableTag(),
