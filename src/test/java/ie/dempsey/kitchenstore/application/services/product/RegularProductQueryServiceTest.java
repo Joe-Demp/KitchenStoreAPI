@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,8 +33,12 @@ class RegularProductQueryServiceTest {
     private static List<House> houseList;
 
     static {
-        List<Product> products = Arrays.asList(TestingEntities.LEMONADE, TestingEntities.CEREAL, TestingEntities.STEAK);
-        productList = new ArrayList<>(products);
+        productList = Arrays.asList(
+                TestingEntities.LEMONADE,
+                TestingEntities.CEREAL,
+                TestingEntities.STEAK,
+                TestingEntities.F_LEMONADE
+        );
 
         List<House> houses = Arrays.asList(TestingEntities.CUPBOARD, TestingEntities.REFRIGERATOR);
         houseList = new ArrayList<>(houses);
@@ -54,9 +59,11 @@ class RegularProductQueryServiceTest {
         emptyService = new RegularProductQueryService(mockEmptyProductRepo, mockHouseRepo);
     }
 
+    // todo create a util class to do this for all tests
     private void initializeMockRepos() {
         when(mockProductRepo.findAll()).thenReturn(productList);
         when(mockEmptyProductRepo.findAll()).thenReturn(new ArrayList<>());
+        when(mockProductRepo.findById(TestingEntities.STEAK_ID)).thenReturn(Optional.ofNullable(TestingEntities.STEAK));
 
         when(mockHouseRepo.findAll()).thenReturn(houseList);
 
@@ -66,6 +73,8 @@ class RegularProductQueryServiceTest {
 
         when(mockHouseRepo.findById(TestingEntities.CUPBOARD_ID))
                 .thenReturn(java.util.Optional.ofNullable(TestingEntities.CUPBOARD));
+        when(mockHouseRepo.findById(TestingEntities.REFRIGERATOR_ID))
+                .thenReturn(java.util.Optional.ofNullable(TestingEntities.REFRIGERATOR));
     }
 
     @BeforeEach
@@ -120,25 +129,25 @@ class RegularProductQueryServiceTest {
     void getWithName() {
         List<Product> lemonadeProducts = regularService.getWithName("Lemonade");
 
-        assertTrue(lemonadeProducts.stream().allMatch(p -> p.getName().equals("Lemonade")));
+        assertTrue(lemonadeProducts.stream().allMatch(p -> p.getName().equalsIgnoreCase("Lemonade")));
         assertTrue(lemonadeProducts.stream().anyMatch(p -> p.getHouse().equals(TestingEntities.REFRIGERATOR)));
         assertTrue(lemonadeProducts.stream().anyMatch(p -> p.getHouse().equals(TestingEntities.CUPBOARD)));
     }
 
     @Test
-    void getWithName_fromHouse() {
+    void getWithName_fromHouse() throws NoSuchHouseException {
         List<Product> lemonadeProducts = regularService.getWithName("Lemonade", TestingEntities.REFRIGERATOR);
         assertTrue(lemonadeProducts.stream().allMatch(p -> p.getHouse().equals(TestingEntities.REFRIGERATOR)));
     }
 
     @Test
-    void getWithName_fromHouse_productDoesNotExist() {
+    void getWithName_fromHouse_productDoesNotExist() throws NoSuchHouseException {
         List<Product> cerealProducts = regularService.getWithName("Cereal", TestingEntities.REFRIGERATOR);
         assertTrue(cerealProducts.isEmpty());
     }
 
     @Test
-    void getById() {
+    void getById() throws NoSuchProductException {
         Product steak = regularService.getById(TestingEntities.STEAK_ID);
         assertEquals(TestingEntities.STEAK, steak);
     }

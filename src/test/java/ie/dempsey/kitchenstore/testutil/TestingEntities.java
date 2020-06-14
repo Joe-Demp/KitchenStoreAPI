@@ -20,6 +20,7 @@ public class TestingEntities {
     public static final Date MAY_2018;
 
     public static final long CUPBOARD_ID = 34;
+    public static final long REFRIGERATOR_ID = 1902;
 
     public static final House CUPBOARD;
     public static final House REFRIGERATOR;
@@ -51,6 +52,7 @@ public class TestingEntities {
                 .setType(House.Type.CUPBOARD);
 
         REFRIGERATOR = new House()
+                .setId(REFRIGERATOR_ID)
                 .setName("Fridge")
                 .setCreated(MAY_2018)
                 .setType(House.Type.FRIDGE);
@@ -61,7 +63,7 @@ public class TestingEntities {
                 .setHouse(CUPBOARD);
 
         F_LEMONADE = new Product()
-                .setName("Lemonade")
+                .setName("lemonade")
                 .setQuantity(8)
                 .setHouse(REFRIGERATOR);
 

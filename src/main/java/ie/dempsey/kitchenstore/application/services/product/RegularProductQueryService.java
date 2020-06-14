@@ -1,14 +1,17 @@
 package ie.dempsey.kitchenstore.application.services.product;
 
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
+import ie.dempsey.kitchenstore.application.exceptions.NoSuchProductException;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import ie.dempsey.kitchenstore.infrastructure.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class RegularProductQueryService implements ProductQueryService {
     private ProductRepository productRepository;
@@ -47,20 +50,35 @@ public class RegularProductQueryService implements ProductQueryService {
         throw new NoSuchHouseException(String.format("House cannot have invalid id %d", houseId));
     }
 
-    // todo deal with case sensitivity
     @Override
     public List<Product> getWithName(String name) {
-        return getWithName(name, null);
+        List<Product> productsWithName = new ArrayList<>();
+        try {
+            productsWithName = getWithName(name, null);
+        } catch (NoSuchHouseException ignored) {
+        }
+        return productsWithName;
     }
 
     @Override
-    public List<Product> getWithName(String name, House house) {
-        return null;
+    public List<Product> getWithName(String name, House house) throws NoSuchHouseException {
+        List<Product> allProducts;
+        if (house == null) {
+            allProducts = productRepository.findAll();
+        } else {
+            allProducts = getFromHouse(house);
+        }
+
+        return allProducts.stream().filter(p -> p.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
     }
 
     @Override
-    public Product getById(long id) {
-        return null;
+    public Product getById(long id) throws NoSuchProductException {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        return optionalProduct.orElseThrow(() -> {
+            String error = String.format("Product with id=%d does not exist", id);
+            return new NoSuchProductException(error);
+        });
     }
 
     @Override

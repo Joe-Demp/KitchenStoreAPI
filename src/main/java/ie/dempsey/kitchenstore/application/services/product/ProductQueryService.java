@@ -1,6 +1,7 @@
 package ie.dempsey.kitchenstore.application.services.product;
 
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
+import ie.dempsey.kitchenstore.application.exceptions.NoSuchProductException;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
 
@@ -14,9 +15,9 @@ public interface ProductQueryService {
 
     List<Product> getWithName(String name);
 
-    List<Product> getWithName(String name, House house);
+    List<Product> getWithName(String name, House house) throws NoSuchHouseException;
 
-    Product getById(long id);
+    Product getById(long id) throws NoSuchProductException;
 
     long countAll();
 }
