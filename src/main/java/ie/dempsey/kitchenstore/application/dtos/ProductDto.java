@@ -1,7 +1,6 @@
 package ie.dempsey.kitchenstore.application.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.domain.entities.tags.AbstractTag;
 import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
@@ -18,7 +17,7 @@ public class ProductDto {
     public String name;
     public String description;
     public int quantity;
-    public House house;
+    public long houseId;
     public Set<AbstractTag> tags;
 
     private ProductDto() {
@@ -32,6 +31,7 @@ public class ProductDto {
         name = product.getName();
         description = product.getDescription();
         quantity = product.getQuantity();
+        houseId = product.getHouse().getId();
         tags = castAllAsAbstract(product.getTags());
     }
 

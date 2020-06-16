@@ -36,9 +36,7 @@ public class RegularProductQueryService implements ProductQueryService {
      * probably don't need this
      */
     @Override
-    public List<Product> getFromHouse(House house) throws NoSuchHouseException {
-        long houseId = house.getId();
-
+    public List<Product> getFromHouse(long houseId) throws NoSuchHouseException {
         if (houseId > 0) {
             Optional<House> optHouse = houseRepository.findById(houseId);
             if (optHouse.isPresent()) {
@@ -56,19 +54,19 @@ public class RegularProductQueryService implements ProductQueryService {
     public List<Product> getWithName(String name) {
         List<Product> productsWithName = new ArrayList<>();
         try {
-            productsWithName = getWithName(name, null);
+            productsWithName = getWithName(name, 0);
         } catch (NoSuchHouseException ignored) {
         }
         return productsWithName;
     }
 
     @Override
-    public List<Product> getWithName(String name, House house) throws NoSuchHouseException {
+    public List<Product> getWithName(String name, long houseId) throws NoSuchHouseException {
         List<Product> allProducts;
-        if (house == null) {
+        if (houseId <= 0) {
             allProducts = productRepository.findAll();
         } else {
-            allProducts = getFromHouse(house);
+            allProducts = getFromHouse(houseId);
         }
 
         return allProducts.stream().filter(p -> p.getName().equalsIgnoreCase(name)).collect(Collectors.toList());

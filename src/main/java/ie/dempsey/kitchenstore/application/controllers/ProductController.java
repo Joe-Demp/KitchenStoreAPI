@@ -6,16 +6,11 @@ import ie.dempsey.kitchenstore.application.services.product.ProductCommandServic
 import ie.dempsey.kitchenstore.application.services.product.ProductQueryService;
 import ie.dempsey.kitchenstore.domain.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-//todo give each command a Dto from which to extract fields from
-//  the controller handles the commands and delegates to the correct service method
 
 @RestController
 @RequestMapping("/product")
@@ -32,17 +27,18 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public List<ProductDto> findAll() {
+    public List<ProductDto> all() {
         return queryService.getAll().stream().map(ProductDto::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ProductDto findById(@PathVariable long id) {
-        try {
-            Product product = queryService.getById(id);
-            return new ProductDto(product);
-        } catch (NoSuchProductException e) {
-            return ProductDto.EMPTY;
-        }
+    public ProductDto byId(@PathVariable long id) throws NoSuchProductException {
+        Product product = queryService.getById(id);
+        return new ProductDto(product);
+    }
+
+    @GetMapping("/house")
+    public List<ProductDto> fromHouse(@RequestParam long id) {
+        return new ArrayList<>();
     }
 }
