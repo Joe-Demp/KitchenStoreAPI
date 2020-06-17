@@ -26,10 +26,11 @@ public class ProductController {
 
     private final HouseQueryService houseQueryService;
 
+    @Autowired
     public ProductController(
-            @Autowired ProductQueryService queryService,
-            @Autowired ProductCommandService commandService,
-            @Autowired HouseQueryService houseQueryService
+            ProductQueryService queryService,
+            ProductCommandService commandService,
+            HouseQueryService houseQueryService
     ) {
         this.queryService = queryService;
         this.commandService = commandService;
@@ -76,7 +77,8 @@ public class ProductController {
         return queryService.countAll();
     }
 
-    @PutMapping("/add")
+    // This is a POST, because multiple requests will change the state on the server many times
+    @PostMapping("/add")
     public ResponseEntity<ProductDto> add(
             @RequestParam long houseId, @RequestBody ProductDto productDto
     ) throws NoSuchHouseException, ValidationException {

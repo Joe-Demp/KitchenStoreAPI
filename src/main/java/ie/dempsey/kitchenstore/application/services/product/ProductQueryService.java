@@ -10,13 +10,13 @@ import java.util.List;
 public interface ProductQueryService {
     List<Product> getAll();
 
-    List<Product> getFromHouse(long houseId) throws NoSuchHouseException;
+    List<Product> getFromHouse(Long houseId) throws NoSuchHouseException;
 
     List<Product> getWithName(String name);
 
     List<Product> getWithName(String name, long houseId) throws NoSuchHouseException;
 
-    Product getById(long id) throws NoSuchProductException;
+    Product getById(Long id) throws NoSuchProductException;
 
     long countAll();
 }

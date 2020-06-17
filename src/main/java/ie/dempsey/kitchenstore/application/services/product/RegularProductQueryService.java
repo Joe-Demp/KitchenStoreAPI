@@ -36,7 +36,7 @@ public class RegularProductQueryService implements ProductQueryService {
      * probably don't need this
      */
     @Override
-    public List<Product> getFromHouse(long houseId) throws NoSuchHouseException {
+    public List<Product> getFromHouse(Long houseId) throws NoSuchHouseException {
         if (houseId > 0) {
             Optional<House> optHouse = houseRepository.findById(houseId);
             if (optHouse.isPresent()) {
@@ -73,7 +73,7 @@ public class RegularProductQueryService implements ProductQueryService {
     }
 
     @Override
-    public Product getById(long id) throws NoSuchProductException {
+    public Product getById(Long id) throws NoSuchProductException {
         Optional<Product> optionalProduct = productRepository.findById(id);
         return optionalProduct.orElseThrow(() -> {
             String error = String.format("Product with id=%d does not exist", id);

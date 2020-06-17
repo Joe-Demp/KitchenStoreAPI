@@ -14,8 +14,8 @@ import java.util.Set;
 public class User implements Serializable {
     // todo add column tags to make columns unique, not nullable etc
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name = "";
     @CreationTimestamp
     private Date joined;
@@ -25,11 +25,11 @@ public class User implements Serializable {
     @JsonBackReference
     private Set<House> houses = new HashSet<>();
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public User setId(long id) {
+    public User setId(Long id) {
         this.id = id;
         return this;
     }

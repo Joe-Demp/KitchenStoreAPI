@@ -11,8 +11,8 @@ import java.util.*;
 @Entity
 public class House implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @CreationTimestamp
     private Date created;
     private String name = "";
@@ -28,11 +28,11 @@ public class House implements Serializable {
     @JsonManagedReference
     private Set<User> users = new HashSet<>();
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public House setId(long id) {
+    public House setId(Long id) {
         this.id = id;
         return this;
     }
