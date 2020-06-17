@@ -12,7 +12,7 @@ import java.util.*;
 public class House implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @CreationTimestamp
     private Date created;
     private String name = "";
@@ -28,11 +28,11 @@ public class House implements Serializable {
     @JsonManagedReference
     private Set<User> users = new HashSet<>();
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public House setId(Long id) {
+    public House setId(long id) {
         this.id = id;
         return this;
     }

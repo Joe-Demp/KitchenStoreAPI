@@ -12,13 +12,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ProductDto implements Serializable {
-    public Long id;
+    public long id;
     public Date created;
     public Date expiry;
     public String name;
     public String description;
     public int quantity;
-    public Long houseId;
+    public long houseId;
     public Set<AbstractTag> tags;
 
     public ProductDto() {
@@ -43,7 +43,6 @@ public class ProductDto implements Serializable {
                 .setDescription(description)
                 .setQuantity(quantity)
                 ;
-        // todo decide about id here
         // todo decide what to do about tags here.
     }
 

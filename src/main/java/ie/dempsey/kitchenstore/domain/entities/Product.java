@@ -15,7 +15,7 @@ import java.util.Set;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @CreationTimestamp
     private Date created;
     private Date expiry;
@@ -31,11 +31,11 @@ public class Product implements Serializable {
     @OneToMany
     private Set<AbstractTag> tags = new HashSet<>();
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public Product setId(Long id) {
+    public Product setId(long id) {
         this.id = id;
         return this;
     }
