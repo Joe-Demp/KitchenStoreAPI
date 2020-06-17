@@ -1,5 +1,6 @@
 package ie.dempsey.kitchenstore.application.advice;
 
+import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchProductException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,9 +13,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RestControllerAdvice
 public class GlobalControllerAdvice {
     @ResponseBody
-    @ExceptionHandler(NoSuchProductException.class)
+    @ExceptionHandler({NoSuchProductException.class, NoSuchHouseException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String productNotFoundHandler(NoSuchProductException ex) {
+    String generalNotFoundHandler(Exception ex) {
         return ex.getMessage();
     }
 }

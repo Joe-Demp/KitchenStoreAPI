@@ -5,7 +5,7 @@ import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import ie.dempsey.kitchenstore.infrastructure.repositories.ProductRepository;
-import ie.dempsey.kitchenstore.testutil.TestingEntities;
+import ie.dempsey.kitchenstore.testutil.TestEntityFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,38 +23,52 @@ class RegularProductCommandServiceTest {
     @Mock
     HouseRepository mockHouseRepo;
 
-    // already contains cereal and lemonade
-    House sourceHouse = TestingEntities.CUPBOARD;
-    House destinationHouse = TestingEntities.REFRIGERATOR;
-
-    Product lemonade = TestingEntities.LEMONADE;
-    Product steak = TestingEntities.STEAK;
-    Product cereal = TestingEntities.CEREAL;
-
-    Tag[] tags = TestingEntities.TAGS;
-
-    RegularProductCommandService testService;
+    Tag[] tags = TestEntityFactory.TAGS;
+    RegularProductCommandService service;
+    private TestEntityFactory entities;
+    private House sourceHouse;
+    private House destinationHouse;
+    private Product lemonade;
+    private Product steak;
+    private Product cereal;
 
     private void initializeTestObjects() {
-        testService = new RegularProductCommandService(mockProductRepo, mockHouseRepo);
+        service = new RegularProductCommandService(mockProductRepo, mockHouseRepo);
+        entities = new TestEntityFactory();
+
+        sourceHouse = entities.cupboard();
+        destinationHouse = entities.refrigerator();
+
+        lemonade = entities.cupboardLemonade();
+        steak = entities.steak();
+        cereal = entities.cereal();
+    }
+
+    private void createRelationships() {
+        cereal.setHouse(sourceHouse);
+        sourceHouse.getProducts().add(cereal);
+
+        lemonade.setHouse(sourceHouse);
+        sourceHouse.getProducts().add(lemonade);
     }
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
         initializeTestObjects();
+        createRelationships();
     }
 
     @AfterEach
     void tearDown() {
         mockProductRepo = null;
         mockHouseRepo = null;
-        testService = null;
+        service = null;
     }
 
     @Test
     void add() {
-        testService.add(destinationHouse, steak);
+        service.add(destinationHouse, steak);
 
         assertTrue(destinationHouse.getProducts().contains(steak));
         assertEquals(destinationHouse, steak.getHouse());
@@ -66,7 +80,7 @@ class RegularProductCommandServiceTest {
 
     @Test
     void remove() {
-        testService.remove(sourceHouse, cereal);
+        service.remove(sourceHouse, cereal);
 
         assertFalse(sourceHouse.getProducts().contains(cereal));
         assertNull(cereal.getHouse());
@@ -79,7 +93,7 @@ class RegularProductCommandServiceTest {
     void setQuantity() {
         assertEquals(2, lemonade.getQuantity());
 
-        testService.setQuantity(lemonade, 3);
+        service.setQuantity(lemonade, 3);
 
         assertEquals(3, lemonade.getQuantity());
         Mockito.verify(mockProductRepo).save(lemonade);
@@ -91,7 +105,7 @@ class RegularProductCommandServiceTest {
         assertTrue(sourceHouse.getProducts().contains(lemonade));
         assertFalse(destinationHouse.getProducts().contains(lemonade));
 
-        testService.moveTo(lemonade, sourceHouse, destinationHouse);
+        service.moveTo(lemonade, sourceHouse, destinationHouse);
 
         assertEquals(destinationHouse, lemonade.getHouse());
         assertTrue(destinationHouse.getProducts().contains(lemonade));
@@ -107,8 +121,8 @@ class RegularProductCommandServiceTest {
         assertTrue(lemonade.getTags().isEmpty());
 
         // Do the tagging both ways to verify that varargs work
-        testService.tag(lemonade, tags);
-        testService.tag(lemonade, tags[0], tags[1]);
+        service.tag(lemonade, tags);
+        service.tag(lemonade, tags[0], tags[1]);
 
         assertEquals(2, lemonade.getTags().size());
         assertTrue(lemonade.getTags().contains(tags[0]));

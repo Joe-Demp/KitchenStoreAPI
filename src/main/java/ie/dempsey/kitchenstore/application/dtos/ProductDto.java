@@ -1,6 +1,7 @@
 package ie.dempsey.kitchenstore.application.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.domain.entities.tags.AbstractTag;
 import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
@@ -10,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ProductDto {
-    public static final ProductDto EMPTY = new ProductDto();
     public long id;
     public Date created;
     public Date expiry;
@@ -20,10 +20,6 @@ public class ProductDto {
     public long houseId;
     public Set<AbstractTag> tags;
 
-    private ProductDto() {
-    }
-
-    // todo, sort out how this will handle House
     public ProductDto(Product product) {
         id = product.getId();
         created = product.getCreated();
@@ -33,6 +29,23 @@ public class ProductDto {
         quantity = product.getQuantity();
         houseId = product.getHouse().getId();
         tags = castAllAsAbstract(product.getTags());
+    }
+
+    public Product project() {
+        return new Product()
+                .setId(id)
+                .setCreated(created)
+                .setExpiry(expiry)
+                .setName(name)
+                .setDescription(description)
+                .setQuantity(quantity)
+                ;
+        // todo decide what to do about tags here.
+    }
+
+    public Product project(House house) {
+        Product projected = project();
+        return projected.setHouse(house);
     }
 
     private Set<AbstractTag> castAllAsAbstract(Set<Tag> Itags) {
