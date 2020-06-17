@@ -6,11 +6,12 @@ import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.domain.entities.tags.AbstractTag;
 import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ProductDto {
+public class ProductDto implements Serializable {
     public long id;
     public Date created;
     public Date expiry;
@@ -19,6 +20,9 @@ public class ProductDto {
     public int quantity;
     public long houseId;
     public Set<AbstractTag> tags;
+
+    public ProductDto() {
+    }
 
     public ProductDto(Product product) {
         id = product.getId();
@@ -33,13 +37,13 @@ public class ProductDto {
 
     public Product project() {
         return new Product()
-                .setId(id)
                 .setCreated(created)
                 .setExpiry(expiry)
                 .setName(name)
                 .setDescription(description)
                 .setQuantity(quantity)
                 ;
+        // todo decide about id here
         // todo decide what to do about tags here.
     }
 
@@ -62,5 +66,69 @@ public class ProductDto {
     @JsonIgnore
     public boolean isEmpty() {
         return id == 0;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getExpiry() {
+        return expiry;
+    }
+
+    public void setExpiry(Date expiry) {
+        this.expiry = expiry;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public long getHouseId() {
+        return houseId;
+    }
+
+    public void setHouseId(long houseId) {
+        this.houseId = houseId;
+    }
+
+    public Set<AbstractTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<AbstractTag> tags) {
+        this.tags = tags;
     }
 }

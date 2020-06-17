@@ -3,9 +3,11 @@ package ie.dempsey.kitchenstore.application.controllers;
 import ie.dempsey.kitchenstore.application.dtos.ProductDto;
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchProductException;
+import ie.dempsey.kitchenstore.application.exceptions.ValidationException;
 import ie.dempsey.kitchenstore.application.services.house.HouseQueryService;
 import ie.dempsey.kitchenstore.application.services.product.ProductCommandService;
 import ie.dempsey.kitchenstore.application.services.product.ProductQueryService;
+import ie.dempsey.kitchenstore.application.validators.product.NewProductValidator;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +21,19 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-    ProductQueryService queryService;
-    ProductCommandService commandService;
-    HouseQueryService houseQueryService;
+    private final ProductQueryService queryService;
+    private final ProductCommandService commandService;
+
+    private final HouseQueryService houseQueryService;
 
     public ProductController(
             @Autowired ProductQueryService queryService,
-            @Autowired ProductCommandService commandService
+            @Autowired ProductCommandService commandService,
+            @Autowired HouseQueryService houseQueryService
     ) {
         this.queryService = queryService;
         this.commandService = commandService;
+        this.houseQueryService = houseQueryService;
     }
 
     private static List<ProductDto> productsToDtos(List<Product> products) {
@@ -73,15 +78,15 @@ public class ProductController {
 
     @PutMapping("/add")
     public ResponseEntity<ProductDto> add(
-            @RequestParam long houseId, @RequestParam ProductDto productDto
-    ) throws NoSuchHouseException {
+            @RequestParam long houseId, @RequestBody ProductDto productDto
+    ) throws NoSuchHouseException, ValidationException {
         House house = houseQueryService.getById(houseId);
         Product newProduct = productDto.project();
 
-        // todo add validation here: the product should have id = 0 and created = null
-        //  ideally should also have a name
+        // todo move this out to the service layer with a "NewProductException"
+        new NewProductValidator().validate(newProduct);
 
         commandService.add(house, newProduct);
-        return new ResponseEntity<>(new ProductDto(newProduct), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new ProductDto(newProduct), HttpStatus.CREATED);
     }
 }
