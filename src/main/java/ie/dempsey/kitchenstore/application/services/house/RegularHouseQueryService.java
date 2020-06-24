@@ -6,6 +6,8 @@ import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RegularHouseQueryService implements HouseQueryService {
     private final HouseRepository repository;
@@ -20,5 +22,15 @@ public class RegularHouseQueryService implements HouseQueryService {
             String message = String.format("The house with id=%d does not exist.", id);
             return new NoSuchHouseException(message);
         });
+    }
+
+    @Override
+    public List<House> getAll() {
+        return null;
+    }
+
+    @Override
+    public List<House> getWithName(String name) {
+        return null;
     }
 }

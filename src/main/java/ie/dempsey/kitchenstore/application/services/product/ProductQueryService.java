@@ -18,5 +18,7 @@ public interface ProductQueryService {
 
     Product getById(long id) throws NoSuchProductException;
 
+    Product getByExample(Product product) throws NoSuchProductException;
+
     long countAll();
 }

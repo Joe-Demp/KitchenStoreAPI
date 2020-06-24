@@ -22,9 +22,10 @@ public class RegularProductCommandService implements ProductCommandService {
     private final HouseRepository houseRepository;
     private final ProductRepository productRepository;
 
+    @Autowired
     public RegularProductCommandService(
-            @Autowired ProductRepository productRepository,
-            @Autowired HouseRepository houseRepository
+            ProductRepository productRepository,
+            HouseRepository houseRepository
     ) {
         this.productRepository = productRepository;
         this.houseRepository = houseRepository;
@@ -34,9 +35,9 @@ public class RegularProductCommandService implements ProductCommandService {
      * Adds a product to a given house in the KitchenStore.
      */
     @Override
-    public void add(House house, Product product) {
-        putProductInHouse(house, product);
-        houseRepository.save(house);
+    public void add(Product product) {
+        putProductInHouse(product);
+        houseRepository.save(product.getHouse());
         productRepository.save(product);
     }
 
@@ -44,22 +45,23 @@ public class RegularProductCommandService implements ProductCommandService {
      * Deletes the specified product from the KitchenStore, and removes it from the specified house.
      */
     @Override
-    public void remove(House house, Product product) {
-        takeProductOutOfHouse(house, product);
-        houseRepository.save(house);
+    public void remove(Product product) {
+        House oldHouse = takeProductOutOfHouse(product);
+        houseRepository.save(oldHouse);
         productRepository.delete(product);
     }
 
     @Override
-    public void setQuantity(Product product, int quantity) {
-        product.setQuantity(quantity);
+    public void update(Product product) {
+        // todo implement a validator here
         productRepository.save(product);
     }
 
     @Override
-    public void moveTo(Product product, House source, House destination) {
-        takeProductOutOfHouse(source, product);
-        putProductInHouse(destination, product);
+    public void moveTo(Product product, House destination) {
+        House source = takeProductOutOfHouse(product);
+        product.setHouse(destination);
+        putProductInHouse(product);
 
         productRepository.save(product);
         houseRepository.save(source);
@@ -94,16 +96,17 @@ public class RegularProductCommandService implements ProductCommandService {
     /**
      * Adds an association between a house and a product.
      */
-    private void putProductInHouse(House house, Product product) {
-        product.setHouse(house);
-        house.getProducts().add(product);
+    private void putProductInHouse(Product product) {
+        product.getHouse().getProducts().add(product);
     }
 
     /**
-     * Removes an assocation between a house and a product.
+     * Removes an association between a house and a product.
      */
-    private void takeProductOutOfHouse(House house, Product product) {
+    private House takeProductOutOfHouse(Product product) {
+        House oldHouse = product.getHouse();
         product.setHouse(null);
-        house.getProducts().remove(product);
+        oldHouse.getProducts().remove(product);
+        return oldHouse;
     }
 }

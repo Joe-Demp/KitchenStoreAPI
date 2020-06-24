@@ -159,6 +159,16 @@ class RegularProductQueryServiceTest {
     }
 
     @Test
+    void getByExample() throws NoSuchProductException {
+        // todo implement
+    }
+
+    @Test
+    void getByExample_badExample() {
+        // todo implement
+    }
+
+    @Test
     void countAll() {
         long countOfProducts = regularService.countAll();
 

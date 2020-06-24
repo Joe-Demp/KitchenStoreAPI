@@ -7,6 +7,7 @@ import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import ie.dempsey.kitchenstore.infrastructure.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,9 +20,10 @@ public class RegularProductQueryService implements ProductQueryService {
     private ProductRepository productRepository;
     private HouseRepository houseRepository;
 
+    @Autowired
     public RegularProductQueryService(
-            @Autowired ProductRepository productRepository,
-            @Autowired HouseRepository houseRepository
+            ProductRepository productRepository,
+            HouseRepository houseRepository
     ) {
         this.productRepository = productRepository;
         this.houseRepository = houseRepository;
@@ -77,6 +79,16 @@ public class RegularProductQueryService implements ProductQueryService {
         Optional<Product> optionalProduct = productRepository.findById(id);
         return optionalProduct.orElseThrow(() -> {
             String error = String.format("Product with id=%d does not exist", id);
+            return new NoSuchProductException(error);
+        });
+    }
+
+    @Override
+    public Product getByExample(Product product) throws NoSuchProductException {
+        Example<Product> productExample = Example.of(product);
+        Optional<Product> optionalProduct = productRepository.findOne(productExample);
+        return optionalProduct.orElseThrow(() -> {
+            String error = String.format("Example product %s does not exist", product.getName());
             return new NoSuchProductException(error);
         });
     }

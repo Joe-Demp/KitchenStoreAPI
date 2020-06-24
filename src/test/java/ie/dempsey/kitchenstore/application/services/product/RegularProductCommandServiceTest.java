@@ -50,6 +50,9 @@ class RegularProductCommandServiceTest {
 
         lemonade.setHouse(sourceHouse);
         sourceHouse.getProducts().add(lemonade);
+
+        // product to add contains its house
+        steak.setHouse(destinationHouse);
     }
 
     @BeforeEach
@@ -68,7 +71,7 @@ class RegularProductCommandServiceTest {
 
     @Test
     void add() {
-        service.add(destinationHouse, steak);
+        service.add(steak);
 
         assertTrue(destinationHouse.getProducts().contains(steak));
         assertEquals(destinationHouse, steak.getHouse());
@@ -80,7 +83,7 @@ class RegularProductCommandServiceTest {
 
     @Test
     void remove() {
-        service.remove(sourceHouse, cereal);
+        service.remove(cereal);
 
         assertFalse(sourceHouse.getProducts().contains(cereal));
         assertNull(cereal.getHouse());
@@ -90,13 +93,11 @@ class RegularProductCommandServiceTest {
     }
 
     @Test
-    void setQuantity() {
-        assertEquals(2, lemonade.getQuantity());
+    void update() {
+        cereal.setDescription("Crunchy corn flakes");
+        service.update(cereal);
 
-        service.setQuantity(lemonade, 3);
-
-        assertEquals(3, lemonade.getQuantity());
-        Mockito.verify(mockProductRepo).save(lemonade);
+        Mockito.verify(mockProductRepo).save(cereal);
     }
 
     @Test
@@ -105,7 +106,7 @@ class RegularProductCommandServiceTest {
         assertTrue(sourceHouse.getProducts().contains(lemonade));
         assertFalse(destinationHouse.getProducts().contains(lemonade));
 
-        service.moveTo(lemonade, sourceHouse, destinationHouse);
+        service.moveTo(lemonade, destinationHouse);
 
         assertEquals(destinationHouse, lemonade.getHouse());
         assertTrue(destinationHouse.getProducts().contains(lemonade));
