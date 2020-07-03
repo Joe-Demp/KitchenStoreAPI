@@ -4,6 +4,8 @@ import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +28,33 @@ public class RegularHouseQueryService implements HouseQueryService {
 
     @Override
     public List<House> getAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public List<House> getWithName(String name) {
-        return null;
+        House houseWithName = new House().setName(name);
+        Example<House> exampleHouseWithName = Example.of(houseWithName, NameMatcher.getInstance());
+        return repository.findAll(exampleHouseWithName);
+    }
+
+    /**
+     * A class to generate a singleton Example matcher that matches entities by name, ignoring case.
+     */
+    private static class NameMatcher {
+        private static ExampleMatcher instance;
+
+        public static ExampleMatcher getInstance() {
+            if (instance == null) {
+                instance = ExampleMatcher
+                        .matchingAll()
+                        .withMatcher(
+                                "name",
+                                ExampleMatcher.GenericPropertyMatchers.ignoreCase()
+                        )
+                ;
+            }
+            return instance;
+        }
     }
 }

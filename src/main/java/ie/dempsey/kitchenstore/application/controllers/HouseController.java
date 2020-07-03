@@ -3,30 +3,38 @@ package ie.dempsey.kitchenstore.application.controllers;
 import ie.dempsey.kitchenstore.application.dtos.HouseDto;
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchUserException;
+import ie.dempsey.kitchenstore.application.services.house.HouseCommandService;
 import ie.dempsey.kitchenstore.application.services.house.HouseQueryService;
+import ie.dempsey.kitchenstore.application.services.user.UserQueryService;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/house")
 public class HouseController {
     private final HouseQueryService queryService;
+    private final HouseCommandService commandService;
+    private final UserQueryService userQueryService;
 
     @Autowired
-    public HouseController(HouseQueryService queryService) {
+    public HouseController(HouseQueryService queryService, HouseCommandService commandService, UserQueryService userQueryService) {
         this.queryService = queryService;
+        this.commandService = commandService;
+        this.userQueryService = userQueryService;
     }
 
     // todo implement the methods below
 
-    private static List<HouseDto> housesToDtos(List<House> houses) {
-        return new ArrayList<>();
+    private static List<HouseDto> housesToDtos(Collection<House> houses) {
+        return houses.stream().map(HouseDto::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -34,20 +42,21 @@ public class HouseController {
         return queryService.getById(id);
     }
 
-    @GetMapping("/user/{uid}")
-    public List<House> byUserId(@PathVariable long uid) throws NoSuchHouseException, NoSuchUserException {
-        // todo use a userQueryService to sort this out
-        return new ArrayList<>();
+    @GetMapping("/user/{id}")
+    public List<HouseDto> byUserId(@PathVariable long id) throws NoSuchUserException {
+        Set<House> houses = userQueryService.getById(id).getHouses();
+        return housesToDtos(houses);
     }
 
     @GetMapping("/")
     public List<House> all() {
-        return new ArrayList<>();
+        return queryService.getAll();
     }
 
-    @GetMapping("/name")
-    public List<HouseDto> withName(@RequestParam String name) {
-        return new ArrayList<>();
+    @GetMapping("/{name}")
+    public List<HouseDto> withName(@PathVariable String name) {
+        List<House> houses = queryService.getWithName(name);
+        return housesToDtos(houses);
     }
 
     @PostMapping("/add")

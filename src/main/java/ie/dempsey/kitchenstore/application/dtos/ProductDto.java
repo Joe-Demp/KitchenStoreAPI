@@ -37,6 +37,7 @@ public class ProductDto implements Serializable {
 
     public Product project() {
         return new Product()
+                .setId(id)
                 .setCreated(created)
                 .setExpiry(expiry)
                 .setName(name)
