@@ -61,7 +61,7 @@ public class HouseController {
 
     @PostMapping("/add")
     public ResponseEntity<HouseDto> add(@RequestBody HouseDto houseDto) {
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/upd")

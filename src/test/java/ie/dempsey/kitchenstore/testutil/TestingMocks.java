@@ -2,6 +2,7 @@ package ie.dempsey.kitchenstore.testutil;
 
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
+import ie.dempsey.kitchenstore.infrastructure.repositories.UserRepository;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Example;
 
@@ -23,6 +24,11 @@ public class TestingMocks {
         Mockito.when(repo.findAll(Mockito.any(Example.class)))
                 .thenReturn(List.of(TestHouseFactory.fridge()));
 
+        return repo;
+    }
+
+    public static UserRepository mockUserRepository() {
+        UserRepository repo = Mockito.mock(UserRepository.class);
         return repo;
     }
 }
