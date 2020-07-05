@@ -33,4 +33,13 @@ public class TestHouseFactory {
     public static List<House> all() {
         return Arrays.asList(fridge(), freezer(), cupboard());
     }
+
+    /**
+     * @return a {@code House} with a name containing only whitespace characters
+     */
+    public static House invalid() {
+        return new House()
+                .setName("    \n")
+                ;
+    }
 }

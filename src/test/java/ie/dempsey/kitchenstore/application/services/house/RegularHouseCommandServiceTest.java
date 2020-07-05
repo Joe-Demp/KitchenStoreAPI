@@ -1,5 +1,6 @@
 package ie.dempsey.kitchenstore.application.services.house;
 
+import ie.dempsey.kitchenstore.application.exceptions.ValidationException;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.User;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
@@ -15,10 +16,9 @@ import org.mockito.Mockito;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.times;
 
 class RegularHouseCommandServiceTest {
     HouseRepository mockHouseRepo;
@@ -27,6 +27,7 @@ class RegularHouseCommandServiceTest {
     RegularHouseCommandService testService;
 
     House cubby, refrigerator;
+    House invalidHouse;
     User mary, jim;
 
     void initializeTestObjects() {
@@ -43,6 +44,8 @@ class RegularHouseCommandServiceTest {
 
         mary.getHouses().add(refrigerator);
         jim.getHouses().add(refrigerator);
+
+        invalidHouse = TestHouseFactory.invalid();
     }
 
     @BeforeEach
@@ -57,14 +60,14 @@ class RegularHouseCommandServiceTest {
     }
 
     @Test
-    void add_repositorySavesHouse() {
+    void add_repositorySavesHouse() throws ValidationException {
         testService.add(cubby);
 
         Mockito.verify(mockHouseRepo).save(cubby);
     }
 
     @Test
-    void add_repositorySavesAllUsers() {
+    void add_repositorySavesAllUsers() throws ValidationException {
         testService.add(cubby);
 
         Mockito.verify(mockUserRepo).save(mary);
@@ -72,7 +75,7 @@ class RegularHouseCommandServiceTest {
     }
 
     @Test
-    void add_usersReferenceHouse() {
+    void add_usersReferenceHouse() throws ValidationException {
         testService.add(cubby);
 
         assertTrue(mary.getHouses().contains(cubby));
@@ -81,8 +84,10 @@ class RegularHouseCommandServiceTest {
 
     @Test
     void add_fail_invalidHouse() {
-        // todo decide about validation first, implement for Products then here
-        // todo implement
+        assertThrows(
+                ValidationException.class,
+                () -> testService.add(invalidHouse)
+        );
     }
 
     @Test
@@ -106,7 +111,7 @@ class RegularHouseCommandServiceTest {
         testService.delete(refrigerator);
 
         users.forEach(user -> assertFalse(user.getHouses().contains(refrigerator)));
-        Mockito.verify(mockUserRepo, atLeast(countOfUsers)).save(any());
+        Mockito.verify(mockUserRepo, times(countOfUsers)).save(any());
     }
 
     @Test

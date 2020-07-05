@@ -36,6 +36,8 @@ public class RegularProductCommandService implements ProductCommandService {
      */
     @Override
     public void add(Product product) {
+        // todo include the validator here
+
         putProductInHouse(product);
         houseRepository.save(product.getHouse());
         productRepository.save(product);

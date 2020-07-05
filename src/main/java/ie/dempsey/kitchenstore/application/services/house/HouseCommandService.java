@@ -1,12 +1,13 @@
 package ie.dempsey.kitchenstore.application.services.house;
 
+import ie.dempsey.kitchenstore.application.exceptions.ValidationException;
 import ie.dempsey.kitchenstore.domain.entities.House;
 
 public interface HouseCommandService {
     /**
      * Adds a house to the application and associates it with a user
      */
-    void add(House house);
+    void add(House house) throws ValidationException;
 
     /**
      * Removes a {@code House} from persistence, disconnecting it from any owning Users.
