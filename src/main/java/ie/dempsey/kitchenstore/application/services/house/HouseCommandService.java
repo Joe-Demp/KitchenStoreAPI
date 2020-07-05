@@ -8,7 +8,10 @@ public interface HouseCommandService {
      */
     void add(House house);
 
-    void remove(House house);
+    /**
+     * Removes a {@code House} from persistence, disconnecting it from any owning Users.
+     */
+    void delete(House house);
 
     /**
      * This method will not change the house's products, nor will it adjust the house's Users

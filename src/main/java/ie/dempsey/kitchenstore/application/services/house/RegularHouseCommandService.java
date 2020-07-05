@@ -7,6 +7,8 @@ import ie.dempsey.kitchenstore.infrastructure.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 public class RegularHouseCommandService implements HouseCommandService {
 
@@ -27,8 +29,17 @@ public class RegularHouseCommandService implements HouseCommandService {
     }
 
     @Override
-    public void remove(House house) {
+    public void delete(House house) {
+        repository.delete(house);
+        removeHouseFromUsers(house);
+        house.setUsers(new HashSet<>());
+    }
 
+    private void removeHouseFromUsers(House house) {
+        for (User user : house.getUsers()) {
+            user.getHouses().remove(house);
+            userRepository.save(user);
+        }
     }
 
     @Override

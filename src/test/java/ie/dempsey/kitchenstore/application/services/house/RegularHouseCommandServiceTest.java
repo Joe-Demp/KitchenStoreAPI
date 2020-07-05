@@ -13,8 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
 
 class RegularHouseCommandServiceTest {
     HouseRepository mockHouseRepo;
@@ -22,7 +26,7 @@ class RegularHouseCommandServiceTest {
 
     RegularHouseCommandService testService;
 
-    House cubby;
+    House cubby, refrigerator;
     User mary, jim;
 
     void initializeTestObjects() {
@@ -31,9 +35,14 @@ class RegularHouseCommandServiceTest {
         testService = new RegularHouseCommandService(mockHouseRepo, mockUserRepo);
 
         cubby = TestHouseFactory.cupboard();
+        refrigerator = TestHouseFactory.fridge();
         mary = TestUserFactory.mary();
         jim = TestUserFactory.jim();
         cubby.getUsers().addAll(List.of(mary, jim));
+        refrigerator.getUsers().addAll(List.of(mary, jim));
+
+        mary.getHouses().add(refrigerator);
+        jim.getHouses().add(refrigerator);
     }
 
     @BeforeEach
@@ -72,16 +81,51 @@ class RegularHouseCommandServiceTest {
 
     @Test
     void add_fail_invalidHouse() {
+        // todo decide about validation first, implement for Products then here
         // todo implement
     }
 
     @Test
-    void remove() {
+    void delete_deletesHouse() {
+        testService.delete(refrigerator);
+
+        Mockito.verify(mockHouseRepo).delete(refrigerator);
+    }
+
+    @Test
+    void delete_dereferencesUsers() {
+        testService.delete(refrigerator);
+
+        assertTrue(refrigerator.getUsers().isEmpty());
+    }
+
+    @Test
+    void delete_usersForgetHouse() {
+        Set<User> users = refrigerator.getUsers();
+        int countOfUsers = users.size();
+        testService.delete(refrigerator);
+
+        users.forEach(user -> assertFalse(user.getHouses().contains(refrigerator)));
+        Mockito.verify(mockUserRepo, atLeast(countOfUsers)).save(any());
+    }
+
+    @Test
+    void update_savesHouse() {
         // todo implement these
     }
 
     @Test
-    void update() {
-        // todo implement these
+    void update_rejectsChangedUsers() {
+        // todo implement
+    }
+
+    @Test
+    void update_rejectsChangedProducts() {
+        // todo implement
+    }
+
+    @Test
+    void update_rejectsInvalidHouse() {
+        // todo implement
     }
 }
