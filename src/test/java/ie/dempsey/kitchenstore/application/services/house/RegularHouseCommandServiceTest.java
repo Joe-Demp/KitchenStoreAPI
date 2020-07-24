@@ -35,7 +35,7 @@ class RegularHouseCommandServiceTest {
         mockUserRepo = TestingMocks.mockUserRepository();
         testService = new RegularHouseCommandService(mockHouseRepo, mockUserRepo);
 
-        cubby = TestHouseFactory.cupboard();
+        cubby = TestHouseFactory.new_cupboard();
         refrigerator = TestHouseFactory.fridge();
         mary = TestUserFactory.mary();
         jim = TestUserFactory.jim();
@@ -120,12 +120,12 @@ class RegularHouseCommandServiceTest {
     }
 
     @Test
-    void update_rejectsChangedUsers() {
+    void update_doesNotChangeUsers() {
         // todo implement
     }
 
     @Test
-    void update_rejectsChangedProducts() {
+    void update_doesNotChangeProducts() {
         // todo implement
     }
 

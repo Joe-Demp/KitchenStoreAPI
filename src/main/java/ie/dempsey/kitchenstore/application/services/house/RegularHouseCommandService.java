@@ -1,7 +1,9 @@
 package ie.dempsey.kitchenstore.application.services.house;
 
+import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.application.exceptions.ValidationException;
 import ie.dempsey.kitchenstore.application.validators.house.NewHouseValidator;
+import ie.dempsey.kitchenstore.application.validators.house.UpdateHouseValidator;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.domain.entities.User;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
@@ -18,6 +20,7 @@ public class RegularHouseCommandService implements HouseCommandService {
     private final UserRepository userRepository;
 
     final NewHouseValidator newHouseValidator = new NewHouseValidator();
+    final UpdateHouseValidator updateHouseValidator = new UpdateHouseValidator();
 
     @Autowired
     public RegularHouseCommandService(HouseRepository repository, UserRepository userRepository) {
@@ -49,7 +52,22 @@ public class RegularHouseCommandService implements HouseCommandService {
     }
 
     @Override
-    public void update(House house) {
+    public void update(House house) throws NoSuchHouseException {
+        /*msg
+         * Update should only work for houses with existing ids
+         * The house in question should exist in the repo already
+         * The house's users should not have been changed
+         * The house's products should not have been updated
+         */
+        long updateId = house.getId();
+        House toUpdate = repository.findById(updateId).orElseThrow(() -> {
+            String msg = String.format("Cannot update non-existent house with id=%d", updateId);
+            return new NoSuchHouseException(msg);
+        });
+
+        house.setUsers(toUpdate.getUsers());
+        house.setProducts(toUpdate.getProducts());
+
 
     }
 

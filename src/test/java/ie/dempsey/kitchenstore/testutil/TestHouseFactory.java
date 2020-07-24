@@ -24,14 +24,15 @@ public class TestHouseFactory {
                 ;
     }
 
-    public static House cupboard() {
+    public static House new_cupboard() {
         return new House()
-                .setId(CUPBOARD_ID)
+                .setName("Cubby")
+                .setDescription("My favourite cupboard.")
                 ;
     }
 
     public static List<House> all() {
-        return Arrays.asList(fridge(), freezer(), cupboard());
+        return Arrays.asList(fridge(), freezer(), new_cupboard());
     }
 
     /**

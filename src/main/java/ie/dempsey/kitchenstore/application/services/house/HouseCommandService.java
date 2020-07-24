@@ -1,5 +1,6 @@
 package ie.dempsey.kitchenstore.application.services.house;
 
+import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.application.exceptions.ValidationException;
 import ie.dempsey.kitchenstore.domain.entities.House;
 
@@ -17,5 +18,5 @@ public interface HouseCommandService {
     /**
      * This method will not change the house's products, nor will it adjust the house's Users
      */
-    void update(House house);
+    void update(House house) throws NoSuchHouseException;
 }
