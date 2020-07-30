@@ -41,7 +41,6 @@ public class ProductController {
         return products.stream().map(ProductDto::new).collect(Collectors.toList());
     }
 
-    // todo change all of these to ResponseEntities if necessary (Status code != 200)
     @GetMapping("/{id}")
     public ProductDto byId(@PathVariable long id) throws NoSuchProductException {
         Product product = queryService.getById(id);

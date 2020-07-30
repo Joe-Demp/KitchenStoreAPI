@@ -49,11 +49,17 @@ public class HouseDto {
                 ;
     }
 
-    public House project(List<Product> products, Set<User> users) {
+    public House project(Set<User> users) {
         House projected = project();
         return projected
-                .setProducts(products)
                 .setUsers(users)
+                ;
+    }
+
+    public House project(List<Product> products, Set<User> users) {
+        House projected = project(users);
+        return projected
+                .setProducts(products)
                 ;
     }
 

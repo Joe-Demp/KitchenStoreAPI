@@ -3,10 +3,12 @@ package ie.dempsey.kitchenstore.application.controllers;
 import ie.dempsey.kitchenstore.application.dtos.HouseDto;
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.application.exceptions.NoSuchUserException;
+import ie.dempsey.kitchenstore.application.exceptions.ValidationException;
 import ie.dempsey.kitchenstore.application.services.house.HouseCommandService;
 import ie.dempsey.kitchenstore.application.services.house.HouseQueryService;
 import ie.dempsey.kitchenstore.application.services.user.UserQueryService;
 import ie.dempsey.kitchenstore.domain.entities.House;
+import ie.dempsey.kitchenstore.domain.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +27,15 @@ public class HouseController {
     private final UserQueryService userQueryService;
 
     @Autowired
-    public HouseController(HouseQueryService queryService, HouseCommandService commandService, UserQueryService userQueryService) {
+    public HouseController(
+            HouseQueryService queryService,
+            HouseCommandService commandService,
+            UserQueryService userQueryService
+    ) {
         this.queryService = queryService;
         this.commandService = commandService;
         this.userQueryService = userQueryService;
     }
-
-    // todo implement the methods below
 
     private static List<HouseDto> housesToDtos(Collection<House> houses) {
         return houses.stream().map(HouseDto::new).collect(Collectors.toList());
@@ -60,13 +64,18 @@ public class HouseController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<HouseDto> add(@RequestBody HouseDto houseDto) {
-        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+    public ResponseEntity<HouseDto> add(@RequestBody HouseDto houseDto) throws ValidationException {
+        House toAdd = mapToHouse(houseDto);
+        commandService.add(toAdd);
+        return new ResponseEntity<>(new HouseDto(toAdd), HttpStatus.CREATED);
     }
 
     @PostMapping("/upd")
-    public ResponseEntity<HouseDto> update(@RequestBody HouseDto houseDto) {
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    public ResponseEntity<HouseDto> update(@RequestBody HouseDto houseDto)
+            throws NoSuchHouseException, ValidationException {
+        House toUpdate = mapToHouse(houseDto);
+        commandService.update(toUpdate);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     /**
@@ -78,7 +87,7 @@ public class HouseController {
      */
     @PostMapping("/del")
     public ResponseEntity<HouseDto> delete(@RequestBody HouseDto houseDto) {
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -88,7 +97,17 @@ public class HouseController {
      * @return The {@code House} that was just untracked.
      */
     @PostMapping("/untrack")
-    public ResponseEntity<HouseDto> untrack(@RequestBody HouseDto houseDto) {
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    public ResponseEntity<HouseDto> untrack(@RequestBody HouseDto houseDto) throws NoSuchHouseException {
+        House toUntrack = queryService.getById(houseDto.id);
+        commandService.delete(toUntrack);
+        return new ResponseEntity<>(new HouseDto(toUntrack), HttpStatus.OK);
+    }
+
+    private House mapToHouse(HouseDto houseDto) {
+        Set<User> houseUsers = userQueryService.all().stream()
+                .filter(user -> houseDto.userIds.contains(user.getId()))
+                .collect(Collectors.toSet());
+
+        return houseDto.project(houseUsers);
     }
 }
