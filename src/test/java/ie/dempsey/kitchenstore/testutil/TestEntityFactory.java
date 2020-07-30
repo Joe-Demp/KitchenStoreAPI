@@ -7,9 +7,9 @@ import ie.dempsey.kitchenstore.domain.entities.tags.Tag;
 import ie.dempsey.kitchenstore.domain.entities.tags.UseFirstTag;
 
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+
+// todo remove this class. Replace with TestProductsFactory
 
 /**
  * A class to supply entities for tests.
@@ -18,13 +18,6 @@ import java.util.List;
  * depend on these entities.</p>
  */
 public class TestEntityFactory {
-
-    // todo change this into a test entity factory
-    //  a new instance for each test method ensures tests are mutually exclusive
-
-    public static final Date MARCH_2019;
-    public static final Date MAY_2018;
-
     public static final long CUPBOARD_ID = 34;
     public static final long REFRIGERATOR_ID = 1902;
 
@@ -34,13 +27,7 @@ public class TestEntityFactory {
     public static final Tag[] TAGS;
 
     static {
-        Calendar cal = new Calendar.Builder().build();
 
-        cal.set(2019, Calendar.MARCH, 12);
-        MARCH_2019 = cal.getTime();
-
-        cal.set(2018, Calendar.MAY, 23);
-        MAY_2018 = cal.getTime();
 
         TAGS = new Tag[]{
                 new PerishableTag(),
@@ -65,7 +52,7 @@ public class TestEntityFactory {
             refrigerator = new House()
                     .setId(REFRIGERATOR_ID)
                     .setName("Fridge")
-                    .setCreated(MAY_2018)
+                    .setCreated(TestDateFactory.MAY_2018)
                     .setType(House.Type.FRIDGE);
         }
         return refrigerator;
@@ -77,7 +64,7 @@ public class TestEntityFactory {
                     .setId(CUPBOARD_ID)
                     .setName("Cupboard")
                     .setDescription("The press in the kitchen")
-                    .setCreated(MARCH_2019)
+                    .setCreated(TestDateFactory.MARCH_2019)
                     .setType(House.Type.CUPBOARD);
         }
         return cupboard;

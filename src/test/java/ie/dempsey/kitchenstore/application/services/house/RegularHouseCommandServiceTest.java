@@ -7,7 +7,10 @@ import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.domain.entities.User;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import ie.dempsey.kitchenstore.infrastructure.repositories.UserRepository;
-import ie.dempsey.kitchenstore.testutil.*;
+import ie.dempsey.kitchenstore.testutil.TestHouseFactory;
+import ie.dempsey.kitchenstore.testutil.TestProductFactory;
+import ie.dempsey.kitchenstore.testutil.TestUserFactory;
+import ie.dempsey.kitchenstore.testutil.TestingMocks;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,27 +44,32 @@ class RegularHouseCommandServiceTest {
         mockUserRepo = TestingMocks.mockUserRepository();
         testService = new RegularHouseCommandService(mockHouseRepo, mockUserRepo);
 
-        cubby = TestHouseFactory.newCupboard();
-        refrigerator = TestHouseFactory.fridge();
-        houseList = List.of(cubby, refrigerator);
+        productList = TestProductFactory.all();
 
+        initializeUsers();
+        initializeHouses();
+        pointUsersToHouses();
+    }
+
+    void initializeUsers() {
         mary = TestUserFactory.mary();
         jim = TestUserFactory.jim();
         userList = List.of(mary, jim);
+    }
 
-        cubby.getUsers().addAll(userList);
-        refrigerator.getUsers().addAll(userList);
-
-        mary.getHouses().addAll(houseList);
-        jim.getHouses().addAll(houseList);
-
+    void initializeHouses() {
+        cubby = TestHouseFactory.newCupboard();
+        refrigerator = TestHouseFactory.fridge();
         invalidHouse = TestHouseFactory.invalid();
         nonExistentHouse = TestHouseFactory.nonExistent();
-        nonExistentHouse.getUsers().addAll(userList);
-        nonExistentHouse.setCreated(TestDateFactory.MARCH_2019);
 
-        productList = TestProductFactory.all();
+        List.of(cubby, refrigerator, nonExistentHouse).forEach(house -> house.getUsers().addAll(userList));
         refrigerator.getProducts().addAll(productList);
+        houseList = List.of(cubby, refrigerator);
+    }
+
+    void pointUsersToHouses() {
+        userList.forEach(user -> user.getHouses().addAll(houseList));
     }
 
     @BeforeEach

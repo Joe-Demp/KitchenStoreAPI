@@ -49,6 +49,7 @@ public class TestHouseFactory {
         return new House()
                 .setId(NON_EXISTENT_HOUSE_ID)
                 .setName("My House")
+                .setCreated(TestDateFactory.MARCH_2019)
                 ;
     }
 }
