@@ -7,14 +7,15 @@ import java.util.List;
 
 public class TestHouseFactory {
     public static final long FRIDGE_ID = 82;
-    public static final long NON_EXISTENT_HOUSE_ID = 0;
-    public static final int NUMBER_OF_HOUSES = 3;
+    public static final long NON_EXISTENT_HOUSE_ID = 42;
     private static final long FREEZER_ID = 505;
     private static final long CUPBOARD_ID = 32;
 
     public static House fridge() {
         return new House()
                 .setId(FRIDGE_ID)
+                .setName("Fridge")
+                .setCreated(TestDateFactory.MARCH_2019)
                 ;
     }
 
@@ -24,7 +25,7 @@ public class TestHouseFactory {
                 ;
     }
 
-    public static House new_cupboard() {
+    public static House newCupboard() {
         return new House()
                 .setName("Cubby")
                 .setDescription("My favourite cupboard.")
@@ -32,7 +33,7 @@ public class TestHouseFactory {
     }
 
     public static List<House> all() {
-        return Arrays.asList(fridge(), freezer(), new_cupboard());
+        return Arrays.asList(fridge(), freezer(), newCupboard());
     }
 
     /**
@@ -41,6 +42,13 @@ public class TestHouseFactory {
     public static House invalid() {
         return new House()
                 .setName("    \n")
+                ;
+    }
+
+    public static House nonExistent() {
+        return new House()
+                .setId(NON_EXISTENT_HOUSE_ID)
+                .setName("My House")
                 ;
     }
 }

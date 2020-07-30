@@ -18,5 +18,5 @@ public interface HouseCommandService {
     /**
      * This method will not change the house's products, nor will it adjust the house's Users
      */
-    void update(House house) throws NoSuchHouseException;
+    void update(House house) throws NoSuchHouseException, ValidationException;
 }

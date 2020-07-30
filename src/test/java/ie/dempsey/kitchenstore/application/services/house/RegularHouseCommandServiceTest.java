@@ -1,13 +1,13 @@
 package ie.dempsey.kitchenstore.application.services.house;
 
+import ie.dempsey.kitchenstore.application.exceptions.NoSuchHouseException;
 import ie.dempsey.kitchenstore.application.exceptions.ValidationException;
 import ie.dempsey.kitchenstore.domain.entities.House;
+import ie.dempsey.kitchenstore.domain.entities.Product;
 import ie.dempsey.kitchenstore.domain.entities.User;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import ie.dempsey.kitchenstore.infrastructure.repositories.UserRepository;
-import ie.dempsey.kitchenstore.testutil.TestHouseFactory;
-import ie.dempsey.kitchenstore.testutil.TestUserFactory;
-import ie.dempsey.kitchenstore.testutil.TestingMocks;
+import ie.dempsey.kitchenstore.testutil.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,25 +27,41 @@ class RegularHouseCommandServiceTest {
     RegularHouseCommandService testService;
 
     House cubby, refrigerator;
+    House nonExistentHouse;
     House invalidHouse;
+    List<House> houseList;
+
     User mary, jim;
+    List<User> userList;
+
+    List<Product> productList;
 
     void initializeTestObjects() {
         mockHouseRepo = TestingMocks.mockHouseRepository();
         mockUserRepo = TestingMocks.mockUserRepository();
         testService = new RegularHouseCommandService(mockHouseRepo, mockUserRepo);
 
-        cubby = TestHouseFactory.new_cupboard();
+        cubby = TestHouseFactory.newCupboard();
         refrigerator = TestHouseFactory.fridge();
+        houseList = List.of(cubby, refrigerator);
+
         mary = TestUserFactory.mary();
         jim = TestUserFactory.jim();
-        cubby.getUsers().addAll(List.of(mary, jim));
-        refrigerator.getUsers().addAll(List.of(mary, jim));
+        userList = List.of(mary, jim);
 
-        mary.getHouses().add(refrigerator);
-        jim.getHouses().add(refrigerator);
+        cubby.getUsers().addAll(userList);
+        refrigerator.getUsers().addAll(userList);
+
+        mary.getHouses().addAll(houseList);
+        jim.getHouses().addAll(houseList);
 
         invalidHouse = TestHouseFactory.invalid();
+        nonExistentHouse = TestHouseFactory.nonExistent();
+        nonExistentHouse.getUsers().addAll(userList);
+        nonExistentHouse.setCreated(TestDateFactory.MARCH_2019);
+
+        productList = TestProductFactory.all();
+        refrigerator.getProducts().addAll(productList);
     }
 
     @BeforeEach
@@ -60,7 +76,7 @@ class RegularHouseCommandServiceTest {
     }
 
     @Test
-    void add_repositorySavesHouse() throws ValidationException {
+    void add_savesHouse() throws ValidationException {
         testService.add(cubby);
 
         Mockito.verify(mockHouseRepo).save(cubby);
@@ -115,22 +131,44 @@ class RegularHouseCommandServiceTest {
     }
 
     @Test
-    void update_savesHouse() {
-        // todo implement these
+    void update_savesHouse() throws NoSuchHouseException, ValidationException {
+        refrigerator.setName("Chilly");
+        testService.update(refrigerator);
+
+        Mockito.verify(mockHouseRepo).save(refrigerator);
     }
 
     @Test
-    void update_doesNotChangeUsers() {
-        // todo implement
+    void update_doesNotChangeUsers() throws NoSuchHouseException, ValidationException {
+        int countOfUsers = refrigerator.getUsers().size();
+        refrigerator.setUsers(TestUserFactory.alternatives());
+        assertNotEquals(countOfUsers, refrigerator.getUsers().size());
+
+        testService.update(refrigerator);
+        assertEquals(countOfUsers, refrigerator.getUsers().size());
     }
 
     @Test
-    void update_doesNotChangeProducts() {
-        // todo implement
+    void update_doesNotChangeProducts() throws NoSuchHouseException, ValidationException {
+        int countOfProducts = refrigerator.getProducts().size();
+        refrigerator.getProducts().clear();
+        assertNotEquals(countOfProducts, refrigerator.getProducts().size());
+
+        testService.update(refrigerator);
+        assertEquals(countOfProducts, refrigerator.getProducts().size());
+    }
+
+    @Test
+    void update_rejectsNonExistentHouse() {
+        assertThrows(NoSuchHouseException.class, () -> {
+            testService.update(nonExistentHouse);
+        });
     }
 
     @Test
     void update_rejectsInvalidHouse() {
-        // todo implement
+        assertThrows(ValidationException.class, () -> {
+            testService.update(invalidHouse);
+        });
     }
 }

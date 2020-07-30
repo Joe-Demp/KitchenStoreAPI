@@ -52,13 +52,9 @@ public class RegularHouseCommandService implements HouseCommandService {
     }
 
     @Override
-    public void update(House house) throws NoSuchHouseException {
-        /*msg
-         * Update should only work for houses with existing ids
-         * The house in question should exist in the repo already
-         * The house's users should not have been changed
-         * The house's products should not have been updated
-         */
+    public void update(House house) throws NoSuchHouseException, ValidationException {
+        updateHouseValidator.validate(house);
+
         long updateId = house.getId();
         House toUpdate = repository.findById(updateId).orElseThrow(() -> {
             String msg = String.format("Cannot update non-existent house with id=%d", updateId);
@@ -68,7 +64,7 @@ public class RegularHouseCommandService implements HouseCommandService {
         house.setUsers(toUpdate.getUsers());
         house.setProducts(toUpdate.getProducts());
 
-
+        repository.save(house);
     }
 
     private void addHouseToUsers(House house) {

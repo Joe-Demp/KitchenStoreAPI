@@ -3,11 +3,12 @@ package ie.dempsey.kitchenstore.testutil;
 import ie.dempsey.kitchenstore.domain.entities.House;
 import ie.dempsey.kitchenstore.infrastructure.repositories.HouseRepository;
 import ie.dempsey.kitchenstore.infrastructure.repositories.UserRepository;
-import org.mockito.Mockito;
 import org.springframework.data.domain.Example;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 public class TestingMocks {
     public static List<House> allHouses;
@@ -16,19 +17,25 @@ public class TestingMocks {
         allHouses = TestHouseFactory.all();
     }
 
+    private static Optional<House> repositoryFridge() {
+        House fridge = TestHouseFactory.fridge();
+        fridge.setUsers(TestUserFactory.all()).setProducts(TestProductFactory.all());
+        return Optional.of(fridge);
+    }
+
     public static HouseRepository mockHouseRepository() {
-        HouseRepository repo = Mockito.mock(HouseRepository.class);
-        Mockito.when(repo.findById(TestHouseFactory.FRIDGE_ID))
-                .thenReturn(Optional.of(TestHouseFactory.fridge()));
-        Mockito.when(repo.findAll()).thenReturn(allHouses);
-        Mockito.when(repo.findAll(Mockito.any(Example.class)))
-                .thenReturn(List.of(TestHouseFactory.fridge()));
+        HouseRepository repo = mock(HouseRepository.class);
+
+        when(repo.findById(TestHouseFactory.FRIDGE_ID)).thenReturn(repositoryFridge());
+        when(repo.findById(TestHouseFactory.NON_EXISTENT_HOUSE_ID)).thenReturn(Optional.empty());
+        when(repo.findAll()).thenReturn(allHouses);
+        when(repo.findAll(any(Example.class))).thenReturn(List.of(TestHouseFactory.fridge()));
 
         return repo;
     }
 
     public static UserRepository mockUserRepository() {
-        UserRepository repo = Mockito.mock(UserRepository.class);
+        UserRepository repo = mock(UserRepository.class);
         return repo;
     }
 }
