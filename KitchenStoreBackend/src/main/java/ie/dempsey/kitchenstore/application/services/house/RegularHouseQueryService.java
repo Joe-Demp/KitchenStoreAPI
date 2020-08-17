@@ -31,6 +31,9 @@ public class RegularHouseQueryService implements HouseQueryService {
         return repository.findAll();
     }
 
+    // todo get this to work. At the moment no example matching is happening
+    // todo write a test for this method
+    // todo take a look at the ExampleMatcher class below
     @Override
     public List<House> getWithName(String name) {
         House houseWithName = new House().setName(name);

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @RestController
 @RequestMapping("/house")
@@ -38,7 +40,7 @@ public class HouseController {
     }
 
     private static List<HouseDto> housesToDtos(Collection<House> houses) {
-        return houses.stream().map(HouseDto::new).collect(Collectors.toList());
+        return houses.stream().map(HouseDto::new).collect(toList());
     }
 
     @GetMapping("/{id}")
@@ -57,7 +59,7 @@ public class HouseController {
         return queryService.getAll();
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public List<HouseDto> withName(@PathVariable String name) {
         List<House> houses = queryService.getWithName(name);
         return housesToDtos(houses);
@@ -106,7 +108,7 @@ public class HouseController {
     private House mapToHouse(HouseDto houseDto) {
         Set<User> houseUsers = userQueryService.all().stream()
                 .filter(user -> houseDto.userIds.contains(user.getId()))
-                .collect(Collectors.toSet());
+                .collect(toSet());
 
         return houseDto.project(houseUsers);
     }
