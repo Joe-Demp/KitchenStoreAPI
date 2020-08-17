@@ -95,8 +95,7 @@ public class Product implements Serializable {
     }
 
     public Set<Tag> getTags() {
-        Set<? extends Tag> tagsToReturn = tags;
-        return (Set<Tag>) tagsToReturn;
+        return new HashSet<>(tags);
     }
 
     public Product setTags(Set<Tag> tags) {

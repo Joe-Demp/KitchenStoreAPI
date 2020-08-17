@@ -66,6 +66,7 @@ class RegularHouseQueryServiceTest {
         List<House> housesWithName = testService.getWithName("");
 
         assertFalse(housesWithName.isEmpty());
-        Mockito.verify(mockHouseRepo).findAll(Mockito.any(Example.class));
+        Example<House> anyExampleHouse = Mockito.any();
+        Mockito.verify(mockHouseRepo).findAll(anyExampleHouse);
     }
 }

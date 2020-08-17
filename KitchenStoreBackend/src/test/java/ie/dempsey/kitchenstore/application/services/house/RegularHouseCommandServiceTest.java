@@ -168,15 +168,13 @@ class RegularHouseCommandServiceTest {
 
     @Test
     void update_rejectsNonExistentHouse() {
-        assertThrows(NoSuchHouseException.class, () -> {
-            testService.update(nonExistentHouse);
-        });
+        assertThrows(NoSuchHouseException.class, () -> testService.update(nonExistentHouse));
     }
 
     @Test
     void update_rejectsInvalidHouse() {
-        assertThrows(ValidationException.class, () -> {
-            testService.update(invalidHouse);
-        });
+        assertThrows(ValidationException.class, () ->
+                testService.update(invalidHouse)
+        );
     }
 }

@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class RegularProductQueryService implements ProductQueryService {
-    private ProductRepository productRepository;
-    private HouseRepository houseRepository;
+    private final ProductRepository productRepository;
+    private final HouseRepository houseRepository;
 
     @Autowired
     public RegularProductQueryService(
