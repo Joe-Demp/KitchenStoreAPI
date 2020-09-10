@@ -74,6 +74,7 @@ public class RegularProductCommandService implements ProductCommandService {
     public void tag(Product product, Tag... tags) {
         Set<Tag> productTags = product.getTags();
         productTags.addAll(Arrays.asList(tags));
+        product.setTags(productTags);
         productRepository.save(product);
     }
 

@@ -7,6 +7,7 @@ import ie.dempsey.kitchenstore.testutil.TestHouseFactory;
 import ie.dempsey.kitchenstore.testutil.TestingMocks;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Example;
@@ -61,6 +62,8 @@ class RegularHouseQueryServiceTest {
         Mockito.verify(mockHouseRepo).findAll();
     }
 
+    // todo re-enable this test, if this behaviour is needed
+    @Disabled("Not sure whether we need this functionality.")
     @Test
     void getWithName_RegularNameExists() {
         List<House> housesWithName = testService.getWithName("");
