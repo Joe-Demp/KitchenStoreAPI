@@ -1,8 +1,10 @@
 export interface Product {
   id: number;
+  created: number;
+  expiry: number;
   name: string;
   description: string;
   quantity: number;
-  created: number;
-  expiry: number;
+  houseId: number;
+  tags: any;
 }
