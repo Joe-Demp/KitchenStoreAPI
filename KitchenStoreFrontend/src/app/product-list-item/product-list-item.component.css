@@ -1,0 +1,45 @@
+.item {
+  /*should have a border*/
+  border-style: solid;
+  border-radius: 1rem;
+  border-color: #660066;
+  width: 50%; /*Should flex about content*/
+  padding: 0 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.grid-left {
+  grid-column: 1;
+}
+
+.grid-right {
+  grid-column: 2;
+  justify-self: end;
+}
+
+.header {
+  /*Big and left justified*/
+}
+
+.description-grid {
+  display: grid;
+}
+
+.description {
+  /*should be small and maybe use a "Console" font, should be in line with the amount*/
+}
+
+.amount {
+  /*Should be small and bold, right justified alongside the text*/
+  float: right;
+}
+
+.date-grid {
+  display: grid;
+}
+
+.dates {
+  /*  Dates should be displayed horizontally across the bottom of the list item*/
+  /*  The titles should be bold*/
+  /*  The font should be larger than the description's but smaller than the header's*/
+}

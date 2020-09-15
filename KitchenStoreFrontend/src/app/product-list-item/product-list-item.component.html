@@ -1,9 +1,11 @@
-<h3>{{product.name}}</h3>
-<p>{{product.description}}</p>
-<p><span>Amt:</span> {{product.quantity}}</p>
-<dl>
-  <dt>Created:</dt>
-  <dd>{{product.created}}</dd>
-  <dt>Expires On:</dt>
-  <dd>{{product.expiry}}</dd>
-</dl>
+<div class="item">
+  <h2 class="header">{{product.name}}</h2>
+  <div class="description-grid">
+    <p class="description grid-left">{{product.description}}</p>
+    <p class="amount grid-right"># {{product.quantity}}</p>
+  </div>
+  <div class="date-grid">
+    <p class="grid-left">Created:<span>{{product.created | date:'dd/MM/yyyy'}}</span></p>
+    <p class="grid-right">Expires:<span>{{product.expiry | date:'dd/MM/yyyy'}}</span></p>
+  </div>
+</div>
